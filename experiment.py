@@ -1,4 +1,3 @@
-"""Main experiment runner - orchestrates training and evaluation."""
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -17,21 +16,9 @@ from train.train_vae import train_vae_for_all_classes
 
 
 class MedicalMNISTExperiment:
-    """Main experiment class for Medical MNIST autoencoder analysis."""
     
     def __init__(self, dataset_path, img_size=64, batch_size=64, latent_dim=32, 
                  epochs=15, class_names=None, save_dir='results/models'):
-        """Initialize experiment.
-        
-        Args:
-            dataset_path: Path to dataset or zip file
-            img_size: Size of images
-            batch_size: Batch size for training
-            latent_dim: Dimension of latent space
-            epochs: Number of training epochs
-            class_names: List of class names
-            save_dir: Directory for saving models
-        """
         self.dataset_path = dataset_path
         self.img_size = img_size
         self.batch_size = batch_size
@@ -53,7 +40,6 @@ class MedicalMNISTExperiment:
         self.vae_histories = {}
     
     def load_data(self):
-        """Load and prepare datasets."""
         print("\n" + "="*60)
         print("LOADING DATASETS")
         print("="*60)
@@ -62,7 +48,6 @@ class MedicalMNISTExperiment:
         return self.datasets
     
     def visualize_samples(self):
-        """Visualize sample images."""
         if self.datasets is None:
             self.load_data()
         
@@ -72,7 +57,6 @@ class MedicalMNISTExperiment:
         visualize_samples(self.datasets, self.data_loader.class_names)
     
     def train_all_models(self):
-        """Train all AE and VAE models."""
         if self.datasets is None:
             self.load_data()
         
@@ -102,7 +86,6 @@ class MedicalMNISTExperiment:
         )
     
     def plot_losses(self):
-        """Plot training loss curves."""
         if not self.ae_histories or not self.vae_histories:
             raise ValueError("Models not trained yet. Call train_all_models() first.")
         
@@ -113,7 +96,6 @@ class MedicalMNISTExperiment:
                             self.data_loader.class_names)
     
     def analyze_reconstructions(self):
-        """Analyze reconstruction quality."""
         if not self.ae_models or not self.vae_models:
             raise ValueError("Models not trained yet. Call train_all_models() first.")
         
@@ -124,7 +106,6 @@ class MedicalMNISTExperiment:
             show_reconstructions(cls, self.datasets, self.ae_models, self.vae_models)
     
     def analyze_denoising(self):
-        """Analyze denoising capability."""
         if not self.ae_models or not self.vae_models:
             raise ValueError("Models not trained yet. Call train_all_models() first.")
         
@@ -135,11 +116,6 @@ class MedicalMNISTExperiment:
             show_denoising(cls, self.datasets, self.ae_models, self.vae_models)
     
     def visualize_latent_space(self, method='pca'):
-        """Visualize latent space.
-        
-        Args:
-            method: 'pca' or 'tsne'
-        """
         if not self.ae_models or not self.vae_models:
             raise ValueError("Models not trained yet. Call train_all_models() first.")
         
@@ -150,7 +126,6 @@ class MedicalMNISTExperiment:
             plot_latent_2d(cls, self.datasets, self.ae_models, self.vae_models, method=method)
     
     def generate_samples_vae(self, n_samples=10):
-        """Generate new samples from VAE."""
         if not self.vae_models:
             raise ValueError("VAE models not trained yet. Call train_all_models() first.")
         
@@ -161,7 +136,6 @@ class MedicalMNISTExperiment:
             generate_samples(cls, self.vae_models, self.latent_dim, n_samples)
     
     def interpolate_vae_latent(self, steps=10):
-        """Interpolate in VAE latent space."""
         if not self.vae_models:
             raise ValueError("VAE models not trained yet. Call train_all_models() first.")
         
@@ -172,7 +146,6 @@ class MedicalMNISTExperiment:
             interpolate_latent(cls, self.vae_models, self.latent_dim, steps)
     
     def evaluate_mse(self, n_batches=3):
-        """Compute MSE for AE and VAE reconstructions."""
         if not self.ae_models or not self.vae_models:
             raise ValueError("Models not trained yet. Call train_all_models() first.")
         
@@ -202,11 +175,6 @@ class MedicalMNISTExperiment:
             print(f"{cls:<15} {ae_mse:>10.4f} {vae_mse:>10.4f}")
     
     def run_full_pipeline(self, visualize=True):
-        """Run complete experiment pipeline.
-        
-        Args:
-            visualize: Whether to show visualizations
-        """
         print("\n" + "="*60)
         print("MEDICAL MNIST AUTOENCODER EXPERIMENT")
         print("="*60)

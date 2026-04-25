@@ -1,20 +1,9 @@
-"""Autoencoder (AE) model architecture."""
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
 
 def build_ae_encoder(img_size=64, latent_dim=32, input_shape=None):
-    """Build convolutional encoder for AE.
-    
-    Args:
-        img_size: Size of input images
-        latent_dim: Dimension of latent space
-        input_shape: Input shape tuple
-        
-    Returns:
-        keras.Model: Encoder model
-    """
     if input_shape is None:
         input_shape = (img_size, img_size, 1)
     
@@ -29,15 +18,6 @@ def build_ae_encoder(img_size=64, latent_dim=32, input_shape=None):
 
 
 def build_ae_decoder(img_size=64, latent_dim=32):
-    """Build convolutional decoder for AE.
-    
-    Args:
-        img_size: Size of output images
-        latent_dim: Dimension of latent space
-        
-    Returns:
-        keras.Model: Decoder model
-    """
     latent_inputs = keras.Input(shape=(latent_dim,), name='decoder_input')
     x = layers.Dense(8 * 8 * 128, activation='relu')(latent_inputs)
     x = layers.Reshape((8, 8, 128))(x)
@@ -50,15 +30,6 @@ def build_ae_decoder(img_size=64, latent_dim=32):
 
 
 def build_ae(img_size=64, latent_dim=32):
-    """Build full Autoencoder: encoder + decoder.
-    
-    Args:
-        img_size: Size of input images
-        latent_dim: Dimension of latent space
-        
-    Returns:
-        tuple: (full_model, encoder, decoder)
-    """
     encoder = build_ae_encoder(img_size, latent_dim)
     decoder = build_ae_decoder(img_size, latent_dim)
     

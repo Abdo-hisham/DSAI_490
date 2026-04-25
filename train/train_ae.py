@@ -1,4 +1,3 @@
-"""Train Autoencoder models for each anatomical region."""
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -10,19 +9,6 @@ from utils.data_loader import DataLoader
 
 def train_ae_for_all_classes(dataset_path, class_names=None, epochs=15, batch_size=64, 
                              img_size=64, save_dir='results/models'):
-    """Train Autoencoder for each anatomical region.
-    
-    Args:
-        dataset_path: Path to dataset or zip file
-        class_names: List of class names
-        epochs: Number of training epochs
-        batch_size: Batch size
-        img_size: Image size
-        save_dir: Directory to save models
-        
-    Returns:
-        dict: Dictionary of class_name -> (model, encoder, decoder, history)
-    """
     os.makedirs(save_dir, exist_ok=True)
     
     data_loader = DataLoader(dataset_path, img_size=img_size, batch_size=batch_size,

@@ -1,4 +1,3 @@
-"""Train Variational Autoencoder models for each anatomical region."""
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -9,21 +8,6 @@ from utils.data_loader import DataLoader
 
 def train_vae_for_all_classes(dataset_path, class_names=None, epochs=15, batch_size=64,
                               img_size=64, latent_dim=32, beta=1.0, save_dir='results/models'):
-    """Train Variational Autoencoder for each anatomical region.
-    
-    Args:
-        dataset_path: Path to dataset or zip file
-        class_names: List of class names
-        epochs: Number of training epochs
-        batch_size: Batch size
-        img_size: Image size
-        latent_dim: Dimension of latent space
-        beta: KL divergence weight
-        save_dir: Directory to save models
-        
-    Returns:
-        dict: Dictionary of class_name -> (model, history)
-    """
     os.makedirs(save_dir, exist_ok=True)
     
     data_loader = DataLoader(dataset_path, img_size=img_size, batch_size=batch_size,

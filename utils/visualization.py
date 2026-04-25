@@ -1,4 +1,3 @@
-"""Visualization utilities for analysis and results."""
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
@@ -7,13 +6,6 @@ from sklearn.manifold import TSNE
 
 
 def visualize_samples(datasets, class_names, figsize=(12, 8)):
-    """Visualize sample images from each class.
-    
-    Args:
-        datasets: Dictionary of class_name -> dataset
-        class_names: List of class names
-        figsize: Figure size
-    """
     fig, axes = plt.subplots(2, 3, figsize=figsize)
     axes = axes.flatten()
 
@@ -29,14 +21,6 @@ def visualize_samples(datasets, class_names, figsize=(12, 8)):
 
 
 def plot_training_losses(ae_histories, vae_histories, class_names, figsize=(14, 24)):
-    """Plot training loss curves for AE and VAE.
-    
-    Args:
-        ae_histories: Dictionary of class_name -> AE history
-        vae_histories: Dictionary of class_name -> VAE history
-        class_names: List of class names
-        figsize: Figure size
-    """
     fig, axes = plt.subplots(len(class_names), 2, figsize=figsize)
 
     for i, cls in enumerate(class_names):
@@ -63,15 +47,6 @@ def plot_training_losses(ae_histories, vae_histories, class_names, figsize=(14, 
 
 
 def show_reconstructions(class_name, datasets, ae_models, vae_models, n=8):
-    """Compare original vs AE vs VAE reconstructions.
-    
-    Args:
-        class_name: Name of the class
-        datasets: Dictionary of class_name -> dataset
-        ae_models: Dictionary of class_name -> (model, encoder, decoder)
-        vae_models: Dictionary of class_name -> model
-        n: Number of samples to display
-    """
     ds = datasets[class_name]
     batch, _ = next(iter(ds))
     imgs = batch[:n].numpy()
@@ -98,30 +73,11 @@ def show_reconstructions(class_name, datasets, ae_models, vae_models, n=8):
 
 
 def add_gaussian_noise(images, noise_factor=0.3):
-    """Add Gaussian noise to images.
-    
-    Args:
-        images: Batch of images
-        noise_factor: Noise magnitude
-        
-    Returns:
-        Noisy images clipped to [0, 1]
-    """
     noisy = images + noise_factor * tf.random.normal(shape=tf.shape(images))
     return tf.clip_by_value(noisy, 0.0, 1.0)
 
 
 def show_denoising(class_name, datasets, ae_models, vae_models, n=6, noise_factor=0.3):
-    """Demonstrate denoising capability of AE and VAE.
-    
-    Args:
-        class_name: Name of the class
-        datasets: Dictionary of class_name -> dataset
-        ae_models: Dictionary of class_name -> (model, encoder, decoder)
-        vae_models: Dictionary of class_name -> model
-        n: Number of samples to display
-        noise_factor: Noise magnitude
-    """
     ds = datasets[class_name]
     batch, _ = next(iter(ds))
     imgs = batch[:n]
@@ -153,19 +109,6 @@ def show_denoising(class_name, datasets, ae_models, vae_models, n=6, noise_facto
 
 
 def get_latent_codes(class_name, datasets, ae_models, vae_models, model_type='ae', n_batches=5):
-    """Extract latent codes from encoder.
-    
-    Args:
-        class_name: Name of the class
-        datasets: Dictionary of class_name -> dataset
-        ae_models: Dictionary of class_name -> (model, encoder, decoder)
-        vae_models: Dictionary of class_name -> model
-        model_type: 'ae' or 'vae'
-        n_batches: Number of batches to process
-        
-    Returns:
-        Array of latent codes
-    """
     ds = datasets[class_name]
     codes = []
 
@@ -183,16 +126,6 @@ def get_latent_codes(class_name, datasets, ae_models, vae_models, model_type='ae
 
 
 def plot_latent_2d(class_name, datasets, ae_models, vae_models, method='pca', figsize=(14, 5)):
-    """Visualize 2D latent space using PCA or t-SNE.
-    
-    Args:
-        class_name: Name of the class
-        datasets: Dictionary of class_name -> dataset
-        ae_models: Dictionary of class_name -> (model, encoder, decoder)
-        vae_models: Dictionary of class_name -> model
-        method: 'pca' or 'tsne'
-        figsize: Figure size
-    """
     ae_codes = get_latent_codes(class_name, datasets, ae_models, vae_models, model_type='ae')
     vae_codes = get_latent_codes(class_name, datasets, ae_models, vae_models, model_type='vae')
 
@@ -222,14 +155,6 @@ def plot_latent_2d(class_name, datasets, ae_models, vae_models, method='pca', fi
 
 
 def generate_samples(class_name, vae_models, latent_dim=32, n=10):
-    """Generate new samples from VAE.
-    
-    Args:
-        class_name: Name of the class
-        vae_models: Dictionary of class_name -> model
-        latent_dim: Dimension of latent space
-        n: Number of samples to generate
-    """
     vae_m = vae_models[class_name]
 
     z_samples = np.random.normal(size=(n, latent_dim)).astype(np.float32)
@@ -246,14 +171,6 @@ def generate_samples(class_name, vae_models, latent_dim=32, n=10):
 
 
 def interpolate_latent(class_name, vae_models, latent_dim=32, steps=10):
-    """Interpolate between two points in VAE latent space.
-    
-    Args:
-        class_name: Name of the class
-        vae_models: Dictionary of class_name -> model
-        latent_dim: Dimension of latent space
-        steps: Number of interpolation steps
-    """
     vae_m = vae_models[class_name]
 
     z_a = np.random.normal(size=(1, latent_dim)).astype(np.float32)
